@@ -37,6 +37,16 @@ public class CategoryServiceImpl implements ICategoryService {
 	}
 
 	@Override
+	public boolean existsByName(String categoryname) {
+		return categoryRepository.existsByCategorynameIgnoreCase(categoryname);
+	}
+
+	@Override
+	public boolean existsByNameExcludeId(String categoryname, int categoryid) {
+		return categoryRepository.existsByCategorynameIgnoreCaseAndCategoryidNot(categoryname, categoryid);
+	}
+
+	@Override
 	public void save(Category category) {
 		categoryRepository.save(category);
 	}

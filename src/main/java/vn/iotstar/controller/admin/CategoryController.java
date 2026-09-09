@@ -53,6 +53,10 @@ public class CategoryController {
 			redirectAttributes.addFlashAttribute("alert", "Tên danh mục không được để trống");
 			return "redirect:/admin/categories/add";
 		}
+		if (categoryService.existsByName(category.getCategoryname().trim())) {
+			redirectAttributes.addFlashAttribute("alert", "Tên danh mục đã tồn tại");
+			return "redirect:/admin/categories/add";
+		}
 
 		category.setImages(fileUploadUtil.save(imageFile, null));
 		categoryService.save(category);
@@ -81,6 +85,10 @@ public class CategoryController {
 		}
 		if (category.getCategoryname() == null || category.getCategoryname().trim().isEmpty()) {
 			redirectAttributes.addFlashAttribute("alert", "Tên danh mục không được để trống");
+			return "redirect:/admin/categories/edit/" + id;
+		}
+		if (categoryService.existsByNameExcludeId(category.getCategoryname().trim(), id)) {
+			redirectAttributes.addFlashAttribute("alert", "Tên danh mục đã tồn tại");
 			return "redirect:/admin/categories/edit/" + id;
 		}
 

@@ -12,6 +12,10 @@ public interface ICategoryService {
 
 	Category findById(int id);
 
+	boolean existsByName(String categoryname);
+
+	boolean existsByNameExcludeId(String categoryname, int categoryid);
+
 	void save(Category category);
 
 	void delete(int id);

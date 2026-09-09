@@ -8,6 +8,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
+<jsp:include page="_nav.jsp" />
 <div class="container mt-4">
 	<h2 class="mb-3">Thêm người dùng</h2>
 	<c:if test="${not empty alert}">
