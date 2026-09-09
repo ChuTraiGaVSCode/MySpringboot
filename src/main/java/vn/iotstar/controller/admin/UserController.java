@@ -31,7 +31,7 @@ public class UserController {
 		this.fileUploadUtil = fileUploadUtil;
 	}
 
-	// GET /admin/users?keyword=... -> danh sach + tim kiem theo username/email/ho ten
+	
 	@GetMapping
 	public String list(@RequestParam(name = "keyword", required = false) String keyword, Model model) {
 		List<User> listuser = userService.search(keyword);
@@ -42,7 +42,10 @@ public class UserController {
 
 	@GetMapping("/add")
 	public String showAddForm(Model model) {
-		model.addAttribute("user", new User());
+		
+		if (!model.containsAttribute("user")) {
+			model.addAttribute("user", new User());
+		}
 		return "admin/user-add";
 	}
 
@@ -54,10 +57,11 @@ public class UserController {
 		String error = validate(user, true);
 		if (error != null) {
 			redirectAttributes.addFlashAttribute("alert", error);
+			redirectAttributes.addFlashAttribute("user", user);
 			return "redirect:/admin/users/add";
 		}
 
-		user.setActive(1); // admin tao truc tiep thi kich hoat luon, khong can OTP
+		user.setActive(1); 
 		user.setCreateDate(Timestamp.from(Instant.now()));
 		user.setImages(fileUploadUtil.save(imageFile, null));
 		userService.save(user);
@@ -67,11 +71,14 @@ public class UserController {
 
 	@GetMapping("/edit/{id}")
 	public String showEditForm(@PathVariable int id, Model model) {
-		User user = userService.findById(id);
-		if (user == null) {
-			return "redirect:/admin/users";
+		
+		if (!model.containsAttribute("user")) {
+			User user = userService.findById(id);
+			if (user == null) {
+				return "redirect:/admin/users";
+			}
+			model.addAttribute("user", user);
 		}
-		model.addAttribute("user", user);
 		return "admin/user-edit";
 	}
 
@@ -89,11 +96,12 @@ public class UserController {
 		String error = validate(user, false);
 		if (error != null) {
 			redirectAttributes.addFlashAttribute("alert", error);
+			redirectAttributes.addFlashAttribute("user", user);
 			return "redirect:/admin/users/edit/" + id;
 		}
 
 		user.setId(id);
-		user.setUsername(old.getUsername()); // khong cho sua username
+		user.setUsername(old.getUsername()); 
 		user.setPassword(newPassword != null && !newPassword.trim().isEmpty() ? newPassword : old.getPassword());
 		user.setCreateDate(old.getCreateDate());
 		user.setOtp(old.getOtp());

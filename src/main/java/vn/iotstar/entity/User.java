@@ -40,7 +40,7 @@ public class User implements Serializable {
 	private String phone;
 
 	@Column(name = "roleid")
-	private int roleid; // 1 = user, 2 = admin, 3 = manager
+	private int roleid; 
 
 	@Column(name = "createDate")
 	private Timestamp createDate;

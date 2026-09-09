@@ -1,12 +1,14 @@
 package vn.iotstar.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -28,6 +30,13 @@ public class Category implements Serializable {
 
 	@Column(name = "Status")
 	private int status;
+
+	
+	@OneToMany(mappedBy = "category")
+	private List<Product> products;
+
+	@OneToMany(mappedBy = "category")
+	private List<Video> videos;
 
 	public Category() {
 		super();
@@ -63,5 +72,33 @@ public class Category implements Serializable {
 
 	public void setStatus(int status) {
 		this.status = status;
+	}
+
+	public List<Product> getProducts() {
+		return products;
+	}
+
+	public void setProducts(List<Product> products) {
+		this.products = products;
+	}
+
+	public List<Video> getVideos() {
+		return videos;
+	}
+
+	public void setVideos(List<Video> videos) {
+		this.videos = videos;
+	}
+
+	public Video addVideo(Video video) {
+		getVideos().add(video);
+		video.setCategory(this);
+		return video;
+	}
+
+	public Video removeVideo(Video video) {
+		getVideos().remove(video);
+		video.setCategory(null);
+		return video;
 	}
 }

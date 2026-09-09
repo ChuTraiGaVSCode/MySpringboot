@@ -13,7 +13,6 @@ public class CategoryServiceImpl implements ICategoryService {
 
 	private final CategoryRepository categoryRepository;
 
-	// Spring tu dong tiem (dependency injection) CategoryRepository vao day
 	public CategoryServiceImpl(CategoryRepository categoryRepository) {
 		this.categoryRepository = categoryRepository;
 	}

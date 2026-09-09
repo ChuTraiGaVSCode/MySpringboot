@@ -16,9 +16,6 @@ public class FileUploadUtil {
 
 	public static final String DEFAULT_IMAGE = "avata.png";
 
-	/**
-	 * Luu file len dia, tra ve ten file da luu (hoac oldFileName neu khong co file moi)
-	 */
 	public String save(MultipartFile file, String oldFileName) {
 		if (file == null || file.isEmpty()) {
 			return oldFileName != null ? oldFileName : DEFAULT_IMAGE;

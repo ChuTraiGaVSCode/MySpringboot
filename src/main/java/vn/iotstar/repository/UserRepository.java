@@ -15,7 +15,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
 	Optional<User> findByEmail(String email);
 
-	// Tim theo username, email hoac ho ten (chi can khop 1 trong 3)
 	@Query("SELECT u FROM User u WHERE lower(u.username) LIKE lower(concat('%', :kw, '%')) "
 			+ "OR lower(u.email) LIKE lower(concat('%', :kw, '%')) "
 			+ "OR lower(u.fullname) LIKE lower(concat('%', :kw, '%'))")

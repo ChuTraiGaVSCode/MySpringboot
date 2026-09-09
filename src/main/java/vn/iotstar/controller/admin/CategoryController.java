@@ -29,7 +29,7 @@ public class CategoryController {
 		this.fileUploadUtil = fileUploadUtil;
 	}
 
-	// GET /admin/categories?keyword=... -> danh sach + tim kiem
+	
 	@GetMapping
 	public String list(@RequestParam(name = "keyword", required = false) String keyword, Model model) {
 		List<Category> listcate = categoryService.search(keyword);
@@ -40,7 +40,9 @@ public class CategoryController {
 
 	@GetMapping("/add")
 	public String showAddForm(Model model) {
-		model.addAttribute("category", new Category());
+		if (!model.containsAttribute("category")) {
+			model.addAttribute("category", new Category());
+		}
 		return "admin/category-add";
 	}
 
@@ -51,10 +53,12 @@ public class CategoryController {
 
 		if (category.getCategoryname() == null || category.getCategoryname().trim().isEmpty()) {
 			redirectAttributes.addFlashAttribute("alert", "Tên danh mục không được để trống");
+			redirectAttributes.addFlashAttribute("category", category);
 			return "redirect:/admin/categories/add";
 		}
 		if (categoryService.existsByName(category.getCategoryname().trim())) {
 			redirectAttributes.addFlashAttribute("alert", "Tên danh mục đã tồn tại");
+			redirectAttributes.addFlashAttribute("category", category);
 			return "redirect:/admin/categories/add";
 		}
 
@@ -66,11 +70,13 @@ public class CategoryController {
 
 	@GetMapping("/edit/{id}")
 	public String showEditForm(@PathVariable int id, Model model) {
-		Category category = categoryService.findById(id);
-		if (category == null) {
-			return "redirect:/admin/categories";
+		if (!model.containsAttribute("category")) {
+			Category category = categoryService.findById(id);
+			if (category == null) {
+				return "redirect:/admin/categories";
+			}
+			model.addAttribute("category", category);
 		}
-		model.addAttribute("category", category);
 		return "admin/category-edit";
 	}
 
@@ -85,10 +91,12 @@ public class CategoryController {
 		}
 		if (category.getCategoryname() == null || category.getCategoryname().trim().isEmpty()) {
 			redirectAttributes.addFlashAttribute("alert", "Tên danh mục không được để trống");
+			redirectAttributes.addFlashAttribute("category", category);
 			return "redirect:/admin/categories/edit/" + id;
 		}
 		if (categoryService.existsByNameExcludeId(category.getCategoryname().trim(), id)) {
 			redirectAttributes.addFlashAttribute("alert", "Tên danh mục đã tồn tại");
+			redirectAttributes.addFlashAttribute("category", category);
 			return "redirect:/admin/categories/edit/" + id;
 		}
 
